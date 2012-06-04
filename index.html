@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>婚礼抽奖程序</title>
+    <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery.jplayer.min.js"></script>
+    <style type="text/css">
+        body {
+            width: 1024px;
+            height: 768px;
+            margin: auto;
+        }
+
+        .container {
+            /*background-image: url("img/1.png");*/
+            width: 1024px;
+            height: 768px;
+        }
+
+        .number {
+            width: 200px;
+            font-size: 200px;
+            font-family: "impact";
+            color: #BA0000;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var status = 0;// 0 开始  1  开始抽奖  2 停止
+        var showInterval = 0;
+        var totalCount = 200;
+        var luckyArray = [];
+        var bShow = 0;
+
+        function initAudio(){
+            $("#jquery_jplayer_1").jPlayer({
+                ready: function (event) {
+                    $(this).jPlayer("setMedia", {
+                        mp3:"mp3/gu.mp3"
+                    });
+                },
+                swfPath: "js",
+                supplied: "mp3",
+                wmode: "window",
+                loop: true
+            });
+
+            $("#jquery_jplayer_2").jPlayer({
+                ready: function (event) {
+                    $(this).jPlayer("setMedia", {
+                        wav:"mp3/ding.wav"
+                    });
+                },
+                swfPath: "js",
+                supplied: "wav",
+                wmode: "window"
+            });
+        }
+
+        function onKeydown( e ){
+            if(e.keyCode == 32 ){ // 空格
+                if( bShow == 1 ){
+                    if( status == 0 ){
+                        status = 1;
+                        $("#jquery_jplayer_2").jPlayer("stop");
+                        $("#jquery_jplayer_1").jPlayer("play");
+                        showInterval = setInterval( showRandNum, 50 );
+                    }
+                    else if( status == 1 ){
+                        $("#jquery_jplayer_1").jPlayer("stop");
+                        $("#jquery_jplayer_2").jPlayer("play");
+                        clearInterval( showInterval );
+                        getLotteryNum();
+                        status =0;
+                    }
+                }
+            }
+            else if ( e.keyCode == 49 ){ // 1
+                showDiv();
+                $("div.container").css( "background-image",'url("img/1.png")' );
+                $("div.number").css( "padding-top", "150px" );
+                $("div.number").css( "padding-left", "420px" );
+            }
+            else if ( e.keyCode == 50 ){ // 2
+                showDiv();
+                $("div.container").css( "background-image",'url("img/2.png")' );
+                $("div.number").css( "padding-top", "260px" );
+                $("div.number").css( "padding-left", "140px" );
+            }
+            else if ( e.keyCode == 51 ){ // 3
+                showDiv();
+                $("div.container").css( "background-image",'url("img/3.png")' );
+                $("div.number").css( "padding-top", "210px" );
+                $("div.number").css( "padding-left", "580px" );
+            }
+            /*else {
+                alert( e.keyCode );
+            }*/
+            else if ( e.keyCode == 66 || e.keyCode == 98 ){ // b black 黑屏
+                showBlack();
+            }
+        }
+
+        function showRandNum() {
+            var num = parseInt(  Math.random() * totalCount ) + 1;
+            $(".number").html( num );
+        }
+
+        function getLotteryNum() {
+            var now = new Date();
+            var num = ( now.getTime() * 7 - 13 ) % totalCount + 1;
+            while( luckyArray.indexOf( num ) != -1 ){
+                now = new Date();
+                num = ( now.getTime() * 7 - 13 ) % totalCount + 1;
+            }
+            $(".number").html( num );
+            luckyArray.push( num );
+            return num;
+        }
+
+        function showBlack() {
+            bShow = 0;
+            $(".number").html( "" );
+            $("body").css( "background-color", "black" );
+            $("body div").hide();
+        }
+
+        function showDiv() {
+            bShow = 1;
+            $(".number").html( "" );
+            $("body").css( "background-color", "white" );
+            $("body div").show();
+        }
+
+        $(document).ready( function() {
+            initAudio();
+            $(document).keydown( onKeydown );
+            showBlack();
+        } );
+    </script>
+</head>
+<body>
+<div id="jquery_jplayer_1" class="jp-jplayer"></div>
+<div id="jquery_jplayer_2" class="jp-jplayer"></div>
+<div class="container">
+    <div class="number">100</div>
+</div>
+
+</body>
+</body>
+</html>
