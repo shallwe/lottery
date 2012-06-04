@@ -1,3 +1,4 @@
 A smart lottery web program, can be used in wedding or organization to do a lottery.  
 朋友结婚时为他们写的一个抽奖程序，直接本地打开，替换奖品，人数后即可使用，将网页全屏（例如chrome的F11）后看抽奖过程效果更佳。
 不打算继续开发，直接开源，若有兴趣，直接更改即可。
+按 1、2、3切换奖品， 空格开始抽奖，再次空格结束，抽到奖的不会再次重复。按b进入黑屏。
